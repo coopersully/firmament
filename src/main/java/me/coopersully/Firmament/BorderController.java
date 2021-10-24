@@ -28,16 +28,8 @@ public class BorderController {
         return reference.getCenter();
     }
 
-    public int getSize () {
+    public int getSize() {
         return this.size;
-    }
-
-    public int getRadius () {
-        return this.size / 2;
-    }
-
-    public int getOldSize () {
-        return this.oldSize;
     }
 
     public void setSize(int newSize) {
@@ -49,6 +41,14 @@ public class BorderController {
 
         reference.setSize(this.size, Math.abs(this.size - oldSize));
 
+    }
+
+    public int getRadius() {
+        return this.size / 2;
+    }
+
+    public int getOldSize() {
+        return this.oldSize;
     }
 
     public void setSizeInstant(int newSize) {

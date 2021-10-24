@@ -1,7 +1,6 @@
 package me.coopersully.Firmament.events;
 
 import me.coopersully.Firmament.FirmamentPlugin;
-import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
@@ -17,9 +16,11 @@ public class FLevelChangeEvent implements Listener {
     @EventHandler
     public void onLevelChange(PlayerLevelChangeEvent event) {
 
-        Player player = event.getPlayer();
         FirmamentPlugin.worldBorder.refresh(false);
 
+        if (!FirmamentPlugin.getInstance().getConfig().getBoolean("settings.announcements")) return;
+
+        Player player = event.getPlayer();
         if (FirmamentPlugin.worldBorder.getSize() > FirmamentPlugin.worldBorder.getOldSize()) {
 
             TextComponent user_agreement = new TextComponent(ChatColor.translateAlternateColorCodes('&', "&7[&a+&7] &aThe firmament has expanded to a diameter of " + FirmamentPlugin.worldBorder.getSize() + "."));

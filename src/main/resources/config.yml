@@ -1,3 +1,21 @@
-# Configuration for the Firmament
-multiplier: 2
+settings:
+  # How many blocks are gained by every level of experience?
+  multiplier: 2
+  # Should the server announce when the firmament changes in size?
+  announcements: true
+
+
+# Sacrificing allows players to permanently sacrifice experience
+# levels to the server in order to gain permanent space in the
+# firmament; permanent blocks are purchased at a rate of 1 Level : 1 Block.
+sacrifice:
+  # Should sacrifices be allowed?
+  enabled: true
+  # What percentage of the world border should the minimum sacrifice require?
+  # "percentage: 10" means that sacrifices must be 10% of the world border's current size.
+  # So if the border was 200 blocks wide, sacrifices must be >= 20 experience levels.
+  percentage: 10
+
+
+# This section is for storage only; do not touch/modify this part.
 permanent-blocks: 0

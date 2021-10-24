@@ -7,12 +7,18 @@ api-version: 1.17
 prefix: Firmament
 
 commands:
+  firmament:
+    description: The prefix for Firmament-related commands.
+    aliases: [f, firm]
   help:
     description: An interactive chat menu with useful information.
     aliases: [ehelp, hhelp, ?, faq]
   refresh:
     description: Force-refresh the border.
     aliases: [forcecheck, force-check, fc]
+  reload:
+    description: Reload the plugin's config.
+    aliases: [rel, r]
   sacrifice:
     description: Sacrifice experience to the firmament permanently.
     aliases: [sac, s]
