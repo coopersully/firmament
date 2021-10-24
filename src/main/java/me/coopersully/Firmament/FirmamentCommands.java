@@ -3,6 +3,8 @@ package me.coopersully.Firmament;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
@@ -75,7 +77,6 @@ public class FirmamentCommands {
 
         Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&7[&bx&7] &b" + sender.getName() + " sacrificed " + amount + " levels to the firmament."));
         sender.sendMessage(ChatColor.BLUE + "The firmament now has " + FirmamentPlugin.permanentBlocks + " permanent blocks.");
-        FirmamentPlugin.worldBorder.refresh(false);
     }
 
     public static void getSize(CommandSender sender) {
@@ -83,7 +84,7 @@ public class FirmamentCommands {
         sender.sendMessage(ChatColor.GRAY + "- " + FirmamentPlugin.permanentBlocks + " of those blocks are permanent sacrifices.");
     }
 
-    public static void whoIsLowest(CommandSender sender) {
+    public static void findMin(CommandSender sender) {
         Collection<? extends Player> playerList = Bukkit.getServer().getOnlinePlayers();
         int totalExpLevels = 0;
         Player minPlayer = null;
@@ -99,7 +100,7 @@ public class FirmamentCommands {
         sender.sendMessage(ChatColor.AQUA + minPlayer.getName() + " has the least amount of experience.");
     }
 
-    public static void whoIsHighest(CommandSender sender) {
+    public static void findMax(CommandSender sender) {
         Collection<? extends Player> playerList = Bukkit.getServer().getOnlinePlayers();
         int totalExpLevels = 0;
         Player maxPlayer = null;

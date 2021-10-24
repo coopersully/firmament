@@ -11,9 +11,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class FirmamentPlugin extends JavaPlugin {
 
-    public static BorderController worldBorder;
+    public static Firmament worldBorder;
     public static int permanentBlocks = 0;
     public static int multiplier = 0;
+    public static String namespace = "world";
 
     public static Plugin getInstance() {
         return Bukkit.getPluginManager().getPlugin("Firmament");
@@ -28,10 +29,18 @@ public class FirmamentPlugin extends JavaPlugin {
         // Generate config
         saveDefaultConfig();
         permanentBlocks = getConfig().getInt("permanent-blocks");
+        namespace = getConfig().getString("settings.namespace");
         multiplier = getConfig().getInt("settings.multiplier");
 
-        // Initialize border
-        worldBorder = new BorderController(getServer().getWorlds().get(0));
+        // Initialize borders
+        if (getServer().getWorld(namespace) == null) {
+            System.out.println(ChatColor.RED + "No worlds by the name of \"" + namespace + "\" were found; please check if your config.yml is correctly configured.");
+            System.out.println(ChatColor.RED + "Disabling the plugin.");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+        // Initialize "worldBorder" with name of world
+        worldBorder = new Firmament(namespace);
         worldBorder.refresh(true);
     }
 
@@ -66,11 +75,11 @@ public class FirmamentPlugin extends JavaPlugin {
                     return true;
                 }
                 case "min", "checkmin" -> {
-                    FirmamentCommands.whoIsLowest(sender);
+                    FirmamentCommands.findMin(sender);
                     return true;
                 }
                 case "max", "checkmax" -> {
-                    FirmamentCommands.whoIsHighest(sender);
+                    FirmamentCommands.findMax(sender);
                     return true;
                 }
                 default -> {

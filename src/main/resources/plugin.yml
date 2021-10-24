@@ -31,3 +31,6 @@ commands:
   max:
     description: Check who has the most experience.
     aliases: [checkmax]
+  dropexp:
+    description: Convert your experience into an experience orb.
+    aliases: [dropxp]

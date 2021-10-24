@@ -1,4 +1,6 @@
 settings:
+  # What is the name of the overworld in your server files?
+  namespace: "world"
   # How many blocks are gained by every level of experience?
   multiplier: 2
   # Should the server announce when the firmament changes in size?

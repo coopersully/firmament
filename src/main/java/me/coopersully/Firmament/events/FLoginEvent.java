@@ -15,6 +15,7 @@ public class FLoginEvent implements Listener {
     @EventHandler
     public void onLogin(PlayerJoinEvent event) {
 
+        event.
         Player player = event.getPlayer();
 
         FirmamentPlugin.worldBorder.refresh(false);
