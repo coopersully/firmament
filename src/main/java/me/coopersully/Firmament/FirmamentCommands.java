@@ -3,8 +3,6 @@ package me.coopersully.Firmament;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
@@ -23,21 +21,18 @@ public class FirmamentCommands {
     }
 
     public static void refresh(CommandSender sender) {
-        sender.sendMessage(ChatColor.YELLOW + "Firmament successfully refreshed.");
-        FirmamentPlugin.worldBorder.refresh(false);
+        sender.sendMessage(ChatColor.GREEN + "The firmament's width was successfully refreshed.");
+        FirmamentPlugin.worldBorder.refresh(false, false);
     }
 
-    public static void reload() {
-        FirmamentPlugin.getInstance().reloadConfig();
-        FirmamentPlugin.getInstance().saveDefaultConfig();
-
-        FirmamentPlugin.permanentBlocks = FirmamentPlugin.getInstance().getConfig().getInt("permanent-blocks");
-        FirmamentPlugin.multiplier = FirmamentPlugin.getInstance().getConfig().getInt("settings.multiplier");
+    public static void reload(CommandSender sender) {
+        sender.sendMessage(ChatColor.GREEN + "Firmament successfully reloaded.");
+        FirmamentPlugin.reloadDefaultConfig();
     }
 
     public static void sacrifice(CommandSender sender, String[] args) {
 
-        if (!FirmamentPlugin.getInstance().getConfig().getBoolean("sacrifice.enabled")) {
+        if (!FirmamentPlugin.sacrificeEnabled) {
             sender.sendMessage(ChatColor.RED + "Sacrifices are not being accepted at this time.");
             return;
         }
@@ -47,21 +42,21 @@ public class FirmamentCommands {
             return;
         }
 
-        if (args.length < 2) {
-            sender.sendMessage(ChatColor.RED + "Usage: /f sacrifice <amount>");
+        if (args.length < 1) {
+            sender.sendMessage(ChatColor.RED + "Usage: /sacrifice <amount>");
             return;
         }
 
         int amount;
         try {
-            amount = Integer.parseInt(args[1]);
+            amount = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
-            sender.sendMessage(ChatColor.RED + "Usage: /f sacrifice <amount>");
+            sender.sendMessage(ChatColor.RED + "Usage: /sacrifice <amount>");
             return;
         }
 
-        if (amount < (FirmamentPlugin.worldBorder.getSize() / 10)) {
-            sender.sendMessage(ChatColor.RED + "Your sacrifice must be " + (FirmamentPlugin.worldBorder.getSize() / 10) + " levels or greater.");
+        if (amount < (FirmamentPlugin.worldBorder.getSize() / FirmamentPlugin.sacrificePercentage)) {
+            sender.sendMessage(ChatColor.RED + "Your sacrifice must be " + (FirmamentPlugin.worldBorder.getSize() / FirmamentPlugin.sacrificePercentage) + " levels or greater.");
             return;
         }
 
@@ -73,7 +68,7 @@ public class FirmamentCommands {
         player.setLevel(player.getLevel() - amount);
         FirmamentPlugin.getInstance().getConfig().set("permanent-blocks", FirmamentPlugin.permanentBlocks + amount);
         FirmamentPlugin.getInstance().saveConfig();
-        reload();
+        FirmamentPlugin.reloadDefaultConfig();
 
         Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&7[&bx&7] &b" + sender.getName() + " sacrificed " + amount + " levels to the firmament."));
         sender.sendMessage(ChatColor.BLUE + "The firmament now has " + FirmamentPlugin.permanentBlocks + " permanent blocks.");
@@ -86,33 +81,33 @@ public class FirmamentCommands {
 
     public static void findMin(CommandSender sender) {
         Collection<? extends Player> playerList = Bukkit.getServer().getOnlinePlayers();
-        int totalExpLevels = 0;
         Player minPlayer = null;
         for (Player currPlayer : playerList) {
             if (minPlayer == null) {
                 minPlayer = currPlayer;
             }
             if (currPlayer.getTotalExperience() < minPlayer.getTotalExperience()) {
-                minPlayer = currPlayer;
+                if (currPlayer.isOnline() && !currPlayer.isDead() && currPlayer.isValid()) minPlayer = currPlayer;
             }
         }
 
+        assert minPlayer != null;
         sender.sendMessage(ChatColor.AQUA + minPlayer.getName() + " has the least amount of experience.");
     }
 
     public static void findMax(CommandSender sender) {
         Collection<? extends Player> playerList = Bukkit.getServer().getOnlinePlayers();
-        int totalExpLevels = 0;
         Player maxPlayer = null;
         for (Player currPlayer : playerList) {
             if (maxPlayer == null) {
                 maxPlayer = currPlayer;
             }
             if (currPlayer.getTotalExperience() > maxPlayer.getTotalExperience()) {
-                maxPlayer = currPlayer;
+                if (currPlayer.isOnline() && !currPlayer.isDead() && currPlayer.isValid()) maxPlayer = currPlayer;
             }
         }
 
+        assert maxPlayer != null;
         sender.sendMessage(ChatColor.AQUA + maxPlayer.getName() + " has the most amount of experience.");
     }
 

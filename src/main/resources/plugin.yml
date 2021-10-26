@@ -8,11 +8,8 @@ prefix: Firmament
 
 commands:
   firmament:
-    description: The prefix for Firmament-related commands.
-    aliases: [f, firm]
-  help:
     description: An interactive chat menu with useful information.
-    aliases: [ehelp, hhelp, ?, faq]
+    aliases: [firm, f, world-border, worldborder, wb, border]
   refresh:
     description: Force-refresh the border.
     aliases: [forcecheck, force-check, fc]

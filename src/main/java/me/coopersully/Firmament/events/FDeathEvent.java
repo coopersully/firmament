@@ -1,14 +1,15 @@
 package me.coopersully.Firmament.events;
 
 import me.coopersully.Firmament.FirmamentPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLevelChangeEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
-public class FLevelChangeEvent implements Listener {
+public class FDeathEvent implements Listener {
 
     @EventHandler
-    public void onLevelChange(PlayerLevelChangeEvent event) {
+    public void onDeath(PlayerDeathEvent event) {
 
         FirmamentPlugin.worldBorder.refresh(false, false, event);
 

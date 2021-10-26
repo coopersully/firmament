@@ -1,6 +1,7 @@
 package me.coopersully.Firmament.events;
 
 import me.coopersully.Firmament.FirmamentPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -10,17 +11,20 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class FLoginEvent implements Listener {
+public class FJoinEvent implements Listener {
 
     @EventHandler
-    public void onLogin(PlayerJoinEvent event) {
+    public void onJoin(PlayerJoinEvent event) {
 
-        event.
-        Player player = event.getPlayer();
-
-        FirmamentPlugin.worldBorder.refresh(false);
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(FirmamentPlugin.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                FirmamentPlugin.worldBorder.refresh(false, false, event);
+            }
+        }, 1);
 
         // If the player spawns outside the firmament
+        Player player = event.getPlayer();
         if (isOutsideBorder(player)) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, (15 * 20), 4));
             player.sendMessage(ChatColor.BLUE + "You are temporarily invulnerable for 15 seconds.");
