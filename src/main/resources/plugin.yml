@@ -2,7 +2,7 @@ main: me.coopersully.Firmament.FirmamentPlugin
 name: Firmament
 version: 1.0
 author: Curse
-description: Adds a custom experience-controlled, dynamic world border.
+description: Adds a custom, experience-controlled, dynamic world border.
 api-version: 1.17
 prefix: Firmament
 
@@ -10,24 +10,12 @@ commands:
   firmament:
     description: An interactive chat menu with useful information.
     aliases: [firm, f, world-border, worldborder, wb, border]
-  refresh:
-    description: Force-refresh the border.
-    aliases: [forcecheck, force-check, fc]
-  reload:
-    description: Reload the plugin's config.
-    aliases: [rel, r]
   sacrifice:
     description: Sacrifice experience to the firmament permanently.
-    aliases: [sac, s]
-  info:
-    description: Get information about the current firmament.
-    aliases: [check, size, query]
-  min:
+    aliases: [sac, s, offer]
+  minimum:
     description: Check who has the least experience.
-    aliases: [checkmin]
-  max:
+    aliases: [min, checkmin]
+  maximum:
     description: Check who has the most experience.
-    aliases: [checkmax]
-  dropexp:
-    description: Convert your experience into an experience orb.
-    aliases: [dropxp]
+    aliases: [max, checkmax]

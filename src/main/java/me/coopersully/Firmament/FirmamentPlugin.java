@@ -48,39 +48,24 @@ public class FirmamentPlugin extends JavaPlugin {
         worldBorder.refresh(true, true);
     }
 
-    public void onDisable() {
-
-    }
-
+    public void onDisable() { }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
         switch (label) {
             case "firmament", "firm", "f", "world-border", "worldborder", "wb", "border" -> {
-                FirmamentCommands.help(sender);
+                FirmamentCommands.firmament(sender, label, args);
                 return true;
             }
-            case "refresh", "forcecheck", "force-check", "fc" -> {
-                FirmamentCommands.refresh(sender);
+            case "sacrifice", "sac", "s", "offer" -> {
+                FirmamentCommands.sacrifice(sender, label, args);
                 return true;
             }
-            case "reload", "rel", "r" -> {
-                FirmamentCommands.reload(sender);
-                return true;
-            }
-            case "sacrifice", "sac", "s" -> {
-                FirmamentCommands.sacrifice(sender, args);
-                return true;
-            }
-            case "info", "check", "size", "query" -> {
-                FirmamentCommands.getSize(sender);
-                return true;
-            }
-            case "min", "checkmin" -> {
+            case "minimum", "min", "checkmin" -> {
                 FirmamentCommands.findMin(sender);
                 return true;
             }
-            case "max", "checkmax" -> {
+            case "maximum", "max", "checkmax" -> {
                 FirmamentCommands.findMax(sender);
                 return true;
             }

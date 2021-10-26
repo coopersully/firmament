@@ -9,15 +9,30 @@ import java.util.Collection;
 
 public class FirmamentCommands {
 
-    public static void help(CommandSender sender) {
+    public static void firmament(CommandSender sender, String label, String[] args) {
+
+        if (args.length < 1) {
+            help(sender, label);
+            return;
+        }
+
+        switch (args[0]) {
+            case "help", "commands", "cmds", "faq", "?" -> help(sender, label);
+            case "reload" -> reload(sender);
+            case "refresh" -> refresh(sender);
+            case "width", "info", "size" -> width(sender);
+            default -> sender.sendMessage(ChatColor.RED + "Usage: /" + label + " <help/reload/refresh/width>");
+        }
+    }
+
+    public static void help(CommandSender sender, String label) {
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e&lThe Firmament &r| &7Author: &bCursedImpulse"));
         sender.sendMessage("");
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7As players gain experience, the world border (\"firmament\") will grow, but as players lose experience via enchantment or death, the firmament will shrink. &eThe current firmament will grow 2 Blocks : 1 Level each player gains."));
         sender.sendMessage("");
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "- &e/f help &7displays the current chat menu."));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "- &e/f info &7displays information about the current firmament."));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "- &e/f sacrifice <amount> &7permanently sacrifices levels for permanent space in the firmament, purchased at a rate of &71 Level : 1 Block."));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "- &e/f refresh &7forcibly refreshes the firmament."));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7* &e/" + label + " width &7displays the firmament's statistics."));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7* &e/" + label +  " reload &7reloads the plugin's configuration."));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7* &e/" + label + " refresh &7reloads the firmament's borders."));
     }
 
     public static void refresh(CommandSender sender) {
@@ -30,7 +45,7 @@ public class FirmamentCommands {
         FirmamentPlugin.reloadDefaultConfig();
     }
 
-    public static void sacrifice(CommandSender sender, String[] args) {
+    public static void sacrifice(CommandSender sender, String label, String[] args) {
 
         if (!FirmamentPlugin.sacrificeEnabled) {
             sender.sendMessage(ChatColor.RED + "Sacrifices are not being accepted at this time.");
@@ -43,7 +58,7 @@ public class FirmamentCommands {
         }
 
         if (args.length < 1) {
-            sender.sendMessage(ChatColor.RED + "Usage: /sacrifice <amount>");
+            sender.sendMessage(ChatColor.RED + "Usage: /" + label + " <amount>");
             return;
         }
 
@@ -51,7 +66,7 @@ public class FirmamentCommands {
         try {
             amount = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
-            sender.sendMessage(ChatColor.RED + "Usage: /sacrifice <amount>");
+            sender.sendMessage(ChatColor.RED + "Usage: /" + label + " <amount>");
             return;
         }
 
@@ -67,16 +82,17 @@ public class FirmamentCommands {
 
         player.setLevel(player.getLevel() - amount);
         FirmamentPlugin.getInstance().getConfig().set("permanent-blocks", FirmamentPlugin.permanentBlocks + amount);
-        FirmamentPlugin.getInstance().saveConfig();
+        FirmamentPlugin.getInstance().saveDefaultConfig();
         FirmamentPlugin.reloadDefaultConfig();
 
         Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&7[&bx&7] &b" + sender.getName() + " sacrificed " + amount + " levels to the firmament."));
         sender.sendMessage(ChatColor.BLUE + "The firmament now has " + FirmamentPlugin.permanentBlocks + " permanent blocks.");
     }
 
-    public static void getSize(CommandSender sender) {
-        sender.sendMessage(ChatColor.YELLOW + "The firmament is currently " + FirmamentPlugin.worldBorder.getSize() + " blocks wide.");
-        sender.sendMessage(ChatColor.GRAY + "- " + FirmamentPlugin.permanentBlocks + " of those blocks are permanent sacrifices.");
+    public static void width(CommandSender sender) {
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7The firmament is currently &b" + FirmamentPlugin.worldBorder.getSize() + " &7blocks wide."));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7* &b" + (FirmamentPlugin.worldBorder.getSize() - FirmamentPlugin.permanentBlocks) + " &7blocks are due to player &bexperience levels&7."));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&',"&7* &b" + FirmamentPlugin.permanentBlocks + " &7blocks are due to &bpermanent sacrifices&7."));
     }
 
     public static void findMin(CommandSender sender) {
