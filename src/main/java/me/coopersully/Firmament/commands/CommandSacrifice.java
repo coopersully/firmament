@@ -2,8 +2,9 @@ package me.coopersully.Firmament.commands;
 
 import me.coopersully.Firmament.CoreUtils;
 import me.coopersully.Firmament.FirmamentPlugin;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import me.coopersully.Firmament.MessageController;
+import me.coopersully.Firmament.config.ConfigLang;
+import me.coopersully.Firmament.config.ConfigMain;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,8 +19,8 @@ public class CommandSacrifice implements CommandExecutor {
         Player player = CoreUtils.getPlayerFromSender(sender);
         if (player == null) return false;
 
-        if (!FirmamentPlugin.sacrificeEnabled) {
-            sender.sendMessage(ChatColor.RED + "Sacrifices are not being accepted at this time.");
+        if (!ConfigMain.isSacrificeEnabled()) {
+            MessageController.tell(player, ConfigLang.getSacrificeFailedDisabled());
             return true;
         }
 
@@ -30,25 +31,27 @@ public class CommandSacrifice implements CommandExecutor {
             amount = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) { return false; }
 
-        if (amount < (FirmamentPlugin.worldBorder.getSize() / FirmamentPlugin.sacrificePercentage)) {
-            sender.sendMessage(ChatColor.RED + "Your sacrifice must be " + (FirmamentPlugin.worldBorder.getSize() / FirmamentPlugin.sacrificePercentage) + " levels or greater.");
+        if (amount < (FirmamentPlugin.worldBorder.getSize() / ConfigMain.getSacrificePercentage())) {
+            MessageController.tell(player, ConfigLang.getSacrificeFailedMinimum().replace("%minimum%", "" + (FirmamentPlugin.worldBorder.getSize() / ConfigMain.getSacrificePercentage())));
             return true;
         }
 
         if (amount > player.getLevel()) {
-            sender.sendMessage(ChatColor.RED + "You do not have enough levels to sacrifice that amount.");
+            MessageController.tell(player, ConfigLang.getSacrificeFailedExperience());
             return true;
         }
 
+        // Remove sacrificed levels from player
         player.setLevel(player.getLevel() - amount);
-        FirmamentPlugin.getInstance().getConfig().set("permanent-blocks", FirmamentPlugin.permanentBlocks + amount);
-        FirmamentPlugin.getInstance().saveDefaultConfig();
-        FirmamentPlugin.reloadDefaultConfig();
 
-        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&7[&bx&7] &b" + sender.getName() + " sacrificed " + amount + " levels to the firmament."));
-        sender.sendMessage(ChatColor.BLUE + "The firmament now has " + FirmamentPlugin.permanentBlocks + " permanent blocks.");
+        // Update permanent blocks in configuration
+        FirmamentPlugin.getPlugin().getConfig().set("permanent-blocks", ConfigMain.getPermanentBlocks() + amount);
+        FirmamentPlugin.getPlugin().saveDefaultConfig();
+        ConfigMain.reload();
 
-        return false;
+        MessageController.announce(ConfigLang.getSacrificeSuccessBroadcast().replace("%player%", player.getName()).replace("%amount%", "" + amount).replace("%size%", "" + ConfigMain.getPermanentBlocks()));
+
+        return true;
 
     }
 

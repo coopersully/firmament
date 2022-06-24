@@ -19,11 +19,11 @@ commands:
     aliases: [sac, s, offer]
 
   minimum:
-    description: Check who has the least experience.
+    description: Determine the player with the least experience.
     usage: /minimum
     aliases: [min, checkmin]
 
   maximum:
-    description: Check who has the most experience.
+    description: Determine the player with the most experience.
     usage: /maximum
     aliases: [max, checkmax]

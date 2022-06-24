@@ -33,7 +33,7 @@ public class CommandMinimum implements CommandExecutor {
         assert minPlayer != null;
         sender.sendMessage(ChatColor.AQUA + minPlayer.getName() + " has the least amount of experience.");
 
-        return false;
+        return true;
 
     }
 

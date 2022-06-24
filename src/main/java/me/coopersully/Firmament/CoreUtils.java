@@ -1,5 +1,6 @@
 package me.coopersully.Firmament;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,6 +32,10 @@ public class CoreUtils {
 
         return items;
 
+    }
+
+    public static @NotNull String getColoredMessage(String message) {
+        return ChatColor.translateAlternateColorCodes('&', message);
     }
 
 }

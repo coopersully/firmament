@@ -1,6 +1,7 @@
 package me.coopersully.Firmament.events;
 
 import me.coopersully.Firmament.FirmamentPlugin;
+import me.coopersully.Firmament.config.ConfigMain;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -29,7 +30,7 @@ public class FJoinEvent implements Listener {
             player.sendMessage(ChatColor.BLUE + "Your grace period will end soon; ensure that you are within the firmament's borders.");
         }
 
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(FirmamentPlugin.getInstance(), () -> {
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(FirmamentPlugin.getPlugin(), () -> {
 
             FirmamentPlugin.worldBorder.refresh(false, false, event);
 
@@ -38,12 +39,12 @@ public class FJoinEvent implements Listener {
             if (!player.hasPlayedBefore()) {
 
                 // Give all guaranteed items
-                givePlayerItems(player, FirmamentPlugin.guaranteedItems);
+                givePlayerItems(player, ConfigMain.getGuaranteedItems());
 
                 // Give one of possible items
                 Random random = new Random();
-                var randomIndex = random.nextInt(FirmamentPlugin.possibleItems.size());
-                player.getInventory().addItem(FirmamentPlugin.possibleItems.get(randomIndex));
+                var randomIndex = random.nextInt(ConfigMain.getPossibleItems().size());
+                player.getInventory().addItem(ConfigMain.getPossibleItems().get(randomIndex));
             }
 
         }, 1);

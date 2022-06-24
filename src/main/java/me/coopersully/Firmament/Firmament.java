@@ -1,5 +1,6 @@
 package me.coopersully.Firmament;
 
+import me.coopersully.Firmament.config.ConfigMain;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
@@ -21,34 +22,34 @@ import java.util.Locale;
 
 public class Firmament {
 
-    int size;
-    int oldSize;
-    WorldBorder overworld;
-    WorldBorder nether = null;
-    WorldBorder the_end = null;
+    private int size;
+    private int oldSize;
+    private WorldBorder overworld;
+    private WorldBorder nether = null;
+    private WorldBorder the_end = null;
 
     public Firmament(String namespace) {
 
         // Overworld cannot be null because of previous checks from FirmamentPlugin
-        overworld = FirmamentPlugin.getInstance().getServer().getWorld(namespace).getWorldBorder();
+        overworld = FirmamentPlugin.getPlugin().getServer().getWorld(namespace).getWorldBorder();
 
         // Check if nether exists
         try {
-            nether = FirmamentPlugin.getInstance().getServer().getWorld(namespace + "_nether").getWorldBorder();
+            nether = FirmamentPlugin.getPlugin().getServer().getWorld(namespace + "_nether").getWorldBorder();
         } catch (NullPointerException e) {
             System.out.println(ChatColor.YELLOW + "WARNING: No nether dimension found, the firmament will not extend to it.");
         }
 
         // Check if the end exists
         try {
-            the_end = FirmamentPlugin.getInstance().getServer().getWorld(namespace + "_the_end").getWorldBorder();
+            the_end = FirmamentPlugin.getPlugin().getServer().getWorld(namespace + "_the_end").getWorldBorder();
         } catch (NullPointerException e) {
             System.out.println(ChatColor.YELLOW + "WARNING: No end dimension found, the firmament will not extend to it.");
         }
 
         // Set default size records to the multiplier set in config.yml
-        this.size = FirmamentPlugin.settingsMultiplier;
-        this.oldSize = FirmamentPlugin.settingsMultiplier;
+        this.size = ConfigMain.getGrowthRate();
+        this.oldSize = ConfigMain.getGrowthRate();
 
         // Set default(s) for center, damage, and size (defined above)
         overworld.setCenter(0.5, 0.5);
@@ -81,10 +82,10 @@ public class Firmament {
 
         // Adjust size parameters for newSize (including sacrifices)
         this.oldSize = size;
-        this.size = FirmamentPlugin.permanentBlocks + (newSize * 2);
+        this.size = ConfigMain.getPermanentBlocks() + (newSize * 2);
 
         // Adjust size to meet minimum if necessary
-        if (this.size < FirmamentPlugin.settingsMultiplier) this.size = FirmamentPlugin.settingsMultiplier;
+        if (this.size < ConfigMain.getGrowthRate()) this.size = ConfigMain.getGrowthRate();
 
         // Set the time to 0 if it is an instant-refresh
         int time = 0;
@@ -126,7 +127,7 @@ public class Firmament {
         // Check if fluctuation should be announced
         if (isSilent) return;
         if (FirmamentPlugin.worldBorder.getSize() == FirmamentPlugin.worldBorder.getOldSize()) return;
-        if (FirmamentPlugin.getInstance().getConfig().getBoolean("settings.announcements")) announce(event);
+        if (ConfigMain.canAnnounce()) announce(event);
     }
 
     public void announce(Event event) {
@@ -153,14 +154,14 @@ public class Firmament {
         if (event instanceof PlayerQuitEvent)
             cause = prefixCause + "&b" + ((PlayerQuitEvent) event).getPlayer().getName() + " &7left the game.\n";
         if (event instanceof PlayerDeathEvent)
-            cause = prefixCause + "&b" + ((PlayerDeathEvent) event).getDeathMessage() + "&7.\n";
+            cause = prefixCause + "&b" + ((PlayerDeathEvent) event).deathMessage() + "&7.\n";
         if (event instanceof PlayerLevelChangeEvent)
             cause = prefixCause + "&b" + ((PlayerLevelChangeEvent) event).getPlayer().getName() + " &7went from level &b" + ((PlayerLevelChangeEvent) event).getOldLevel() + " &7to &b" + ((PlayerLevelChangeEvent) event).getNewLevel() + "&7.\n";
 
         // Push announcement
         assert notification != null;
         notification.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.translateAlternateColorCodes('&', cause + change + volume))));
-        Bukkit.spigot().broadcast(notification);
+        Bukkit.broadcast(notification);
 
     }
 

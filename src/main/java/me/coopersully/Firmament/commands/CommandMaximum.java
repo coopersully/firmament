@@ -33,7 +33,7 @@ public class CommandMaximum implements CommandExecutor {
         assert maxPlayer != null;
         sender.sendMessage(ChatColor.AQUA + maxPlayer.getName() + " has the most amount of experience.");
 
-        return false;
+        return true;
 
     }
 

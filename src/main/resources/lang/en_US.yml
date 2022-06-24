@@ -1,0 +1,12 @@
+# The prefix for every message sent by the plugin
+prefix: "&eFirmament &r\u00BB "
+
+# All messages related to sacrificing experience levels to the Firmament.
+sacrifice:
+  failure:
+    experience: "&cYou do not have enough levels to sacrifice that amount."
+    permission: "&cYou don't have permission to sacrifice to the Firmament."
+    disabled: "&cThe Firmament is not accepting sacrifices at this time."
+    minimum: "&cYour sacrifice must be %minimum% levels or greater."
+  success:
+    broadcast: "&e%player% &7sacrificed &e%amount% &7levels to the Firmament; the border is now &e%size% &7blocks wide."
