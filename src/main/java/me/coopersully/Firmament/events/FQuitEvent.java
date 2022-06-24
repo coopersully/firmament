@@ -10,13 +10,6 @@ public class FQuitEvent implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(FirmamentPlugin.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                FirmamentPlugin.worldBorder.refresh(false, false, event);
-            }
-        }, 1);
-
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(FirmamentPlugin.getInstance(), () -> FirmamentPlugin.worldBorder.refresh(false, false, event), 1);
     }
 }

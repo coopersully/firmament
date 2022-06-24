@@ -1,10 +1,36 @@
+# When first starting out, it can be hard to gain experience
+# in such a small area, making it difficult to expand the firmament.
+# Because of this, you can enable a "handicap" item to be given to
+# players upon their first time joining the server. If enabled, each
+# player will be given a single random item from the list below.
+starting-items:
+  # Should players be granted a starting item upon their first time joining?
+  enabled: true
+  # What items should the player receive upon joining?
+  # All the below items are guaranteed.
+  guaranteed:
+    - STONE_SWORD
+    - STONE_PICKAXE
+    - EXPERIENCE_BOTTLE
+  # What items should the player be able to receive upon joining?
+  # They will receive one (1) of the possible items.
+  possibilities:
+    - OAK_SAPLING
+    - SPRUCE_SAPLING
+    - BIRCH_SAPLING
+
+
 settings:
   # What is the name of the overworld in your server files?
   namespace: "world"
   # How many blocks are gained by every level of experience?
+  # It is recommended to keep this setting >= 2
   multiplier: 2
   # Should the server announce when the firmament changes in size?
   announcements: true
+  # Should the server display a boss-bar HUD on the top center of the screen?
+  # This is similar to announcements, but is less invasive and sleeker.
+  bossbar: true
 
 
 # Sacrificing allows players to permanently sacrifice experience
@@ -17,7 +43,6 @@ sacrifice:
   # "percentage: 10" means that sacrifices must be 10% of the world border's current size.
   # So if the border was 200 blocks wide, sacrifices must be >= 20 experience levels.
   percentage: 10
-
 
 # This section is for storage only; do not touch/modify this part.
 permanent-blocks: 0

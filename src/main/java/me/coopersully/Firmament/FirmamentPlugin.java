@@ -1,17 +1,22 @@
 package me.coopersully.Firmament;
 
+import me.coopersully.Firmament.commands.CommandFirmament;
+import me.coopersully.Firmament.commands.CommandMaximum;
+import me.coopersully.Firmament.commands.CommandMinimum;
+import me.coopersully.Firmament.commands.CommandSacrifice;
 import me.coopersully.Firmament.events.FDeathEvent;
 import me.coopersully.Firmament.events.FLevelChangeEvent;
 import me.coopersully.Firmament.events.FJoinEvent;
 import me.coopersully.Firmament.events.FQuitEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
+
 public class FirmamentPlugin extends JavaPlugin {
+
+    private static FirmamentPlugin instance;
 
     public static Firmament worldBorder;
 
@@ -24,7 +29,14 @@ public class FirmamentPlugin extends JavaPlugin {
 
     public static int permanentBlocks = 0;
 
+    public static List<ItemStack> guaranteedItems;
+    public static List<ItemStack> possibleItems;
+
+
     public void onEnable() {
+
+        // Initialize instance
+        instance = this;
 
         // Enable all listeners
         getServer().getPluginManager().registerEvents(new FLevelChangeEvent(), this);
@@ -46,37 +58,18 @@ public class FirmamentPlugin extends JavaPlugin {
         // Initialize "worldBorder" with name of world
         worldBorder = new Firmament(settingsNamespace);
         worldBorder.refresh(true, true);
+
+        // Register all commands
+        getServer().getPluginCommand("firmament").setExecutor(new CommandFirmament());
+        getServer().getPluginCommand("sacrifice").setExecutor(new CommandSacrifice());
+        getServer().getPluginCommand("minimum").setExecutor(new CommandMinimum());
+        getServer().getPluginCommand("maximum").setExecutor(new CommandMaximum());
     }
 
     public void onDisable() { }
 
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-
-        switch (label) {
-            case "firmament", "firm", "f", "world-border", "worldborder", "wb", "border" -> {
-                FirmamentCommands.firmament(sender, label, args);
-                return true;
-            }
-            case "sacrifice", "sac", "s", "offer" -> {
-                FirmamentCommands.sacrifice(sender, label, args);
-                return true;
-            }
-            case "minimum", "min", "checkmin" -> {
-                FirmamentCommands.findMin(sender);
-                return true;
-            }
-            case "maximum", "max", "checkmax" -> {
-                FirmamentCommands.findMax(sender);
-                return true;
-            }
-        }
-
-        return false;
-
-    }
-
-    public static Plugin getInstance() {
-        return Bukkit.getPluginManager().getPlugin("Firmament");
+    public static FirmamentPlugin getInstance() {
+        return instance;
     }
     
     public static void reloadDefaultConfig() {
@@ -94,6 +87,11 @@ public class FirmamentPlugin extends JavaPlugin {
 
         // Storage section
         permanentBlocks = getInstance().getConfig().getInt("permanent-blocks");
+
+        // Join items section
+        var startingItems = getInstance().getConfig().getConfigurationSection("starting-items");
+        guaranteedItems = CoreUtils.getItemsFromStrings(startingItems.getStringList("guaranteed"));
+        possibleItems = CoreUtils.getItemsFromStrings(startingItems.getStringList("possibilities"));
     }
 
 }

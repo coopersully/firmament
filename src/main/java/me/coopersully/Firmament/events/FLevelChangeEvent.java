@@ -9,9 +9,7 @@ public class FLevelChangeEvent implements Listener {
 
     @EventHandler
     public void onLevelChange(PlayerLevelChangeEvent event) {
-
         FirmamentPlugin.worldBorder.refresh(false, false, event);
-
     }
 
 }
