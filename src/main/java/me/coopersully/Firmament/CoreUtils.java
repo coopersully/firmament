@@ -22,16 +22,13 @@ public class CoreUtils {
     }
 
     public static @NotNull List<ItemStack> getItemsFromStrings(@NotNull List<String> materials) {
-
         List<ItemStack> items = new ArrayList<>();
         for (var material : materials) {
             var thisMaterial = Material.valueOf(material);
             var thisItem = new ItemStack(thisMaterial, 1);
             items.add(thisItem);
         }
-
         return items;
-
     }
 
     public static @NotNull String getColoredMessage(String message) {

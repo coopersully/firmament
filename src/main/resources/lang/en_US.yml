@@ -16,3 +16,6 @@ general:
     increase: "increased"
     decrease: "decreased"
   broadcast: "&7The firmament has &e%operation% &7to a width of &e%size%&7."
+
+join:
+  protection: "&e&oWatch out, you're outside of the Firmament! \n&7You are temporarily invulnerable for the next &e%time% &7seconds. \n&7Make sure that you are inside the Firmament's borders soon."

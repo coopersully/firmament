@@ -90,8 +90,13 @@ public class Firmament {
 
         // Set the time to 0 if it is an instant-refresh
         int time = 0;
-        //                     Distance formula                     Speed multiplier
-        if (!isInstant) time = Math.abs(this.size - this.oldSize) / ConfigMain.getSpeed();
+        if (!isInstant) {
+            // Distance between old & new border
+            double dist = Math.abs(this.size - overworld.getSize());
+            // Divided by the speed multiplier
+            double realTime = (float) (dist / ConfigMain.getSpeed());
+            time = (int) realTime;
+        }
 
         // Set actual size of WorldBorder(s)
         overworld.setSize(this.size, time);

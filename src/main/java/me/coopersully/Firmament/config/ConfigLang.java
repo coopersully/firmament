@@ -28,6 +28,8 @@ public class ConfigLang implements PluginConfig {
     private static String generalOperationDecrease;
     private static String generalBroadcast;
 
+    private static String joinProtection;
+
     public static void reload() {
         prefix = CoreUtils.getColoredMessage(file.getString("prefix"));
 
@@ -55,6 +57,9 @@ public class ConfigLang implements PluginConfig {
         generalOperationDecrease = CoreUtils.getColoredMessage(operation.getString("decrease"));
 
         generalBroadcast = CoreUtils.getColoredMessage(general.getString("broadcast"));
+
+        var join = file.getConfigurationSection("join");
+        joinProtection = CoreUtils.getColoredMessage(join.getString("protection"));
 
     }
 
@@ -111,5 +116,9 @@ public class ConfigLang implements PluginConfig {
 
     public static String getGeneralBroadcast() {
         return generalBroadcast;
+    }
+
+    public static String getJoinProtection() {
+        return joinProtection;
     }
 }
