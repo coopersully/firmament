@@ -13,12 +13,20 @@ public class ConfigLang implements PluginConfig {
 
     private static FileConfiguration file;
 
+    /* All language configuration variables
+    are listed below in the order that they
+    appear in the language's .yml file.  */
     private static String prefix;
+
     private static String sacrificeFailedPermission;
     private static String sacrificeFailedExperience;
     private static String sacrificeFailedDisabled;
     private static String sacrificeFailedMinimum;
     private static String sacrificeSuccessBroadcast;
+
+    private static String generalOperationIncrease;
+    private static String generalOperationDecrease;
+    private static String generalBroadcast;
 
     public static void reload() {
         prefix = CoreUtils.getColoredMessage(file.getString("prefix"));
@@ -36,6 +44,17 @@ public class ConfigLang implements PluginConfig {
 
         var sacrificeSuccess = sacrifice.getConfigurationSection("success");
         sacrificeSuccessBroadcast = CoreUtils.getColoredMessage(sacrificeSuccess.getString("broadcast"));
+
+        var general = file.getConfigurationSection("general");
+
+        assert general != null;
+        var operation = general.getConfigurationSection("operations");
+
+        assert operation != null;
+        generalOperationIncrease = CoreUtils.getColoredMessage(operation.getString("increase"));
+        generalOperationDecrease = CoreUtils.getColoredMessage(operation.getString("decrease"));
+
+        generalBroadcast = CoreUtils.getColoredMessage(general.getString("broadcast"));
 
     }
 
@@ -80,5 +99,17 @@ public class ConfigLang implements PluginConfig {
 
     public static String getSacrificeSuccessBroadcast() {
         return sacrificeSuccessBroadcast;
+    }
+
+    public static String getGeneralOperationDecrease() {
+        return generalOperationDecrease;
+    }
+
+    public static String getGeneralOperationIncrease() {
+        return generalOperationIncrease;
+    }
+
+    public static String getGeneralBroadcast() {
+        return generalBroadcast;
     }
 }

@@ -12,6 +12,10 @@ starting-items:
     - STONE_SWORD
     - STONE_PICKAXE
     - EXPERIENCE_BOTTLE
+    - EXPERIENCE_BOTTLE
+    - EXPERIENCE_BOTTLE
+    - EXPERIENCE_BOTTLE
+    - EXPERIENCE_BOTTLE
   # What items should the player be able to receive upon joining?
   # They will receive one (1) of the possible items.
   possibilities:
@@ -26,12 +30,12 @@ settings:
   # How many blocks are gained by every level of experience?
   # It is recommended to keep this setting >= 2
   multiplier: 2
+  # How many blocks-per-second should the firmament travel?
+  # i.e. "speed: 5" will grow/shrink at 5 blocks-per-second.
+  # This can only be set to whole numbers greater than 0.
+  speed: 1
   # Should the server announce when the firmament changes in size?
   announcements: true
-  # Should the server display a boss-bar HUD on the top center of the screen?
-  # This is similar to announcements, but is less invasive and sleeker.
-  bossbar: true
-
 
 # Sacrificing allows players to permanently sacrifice experience
 # levels to the server in order to gain permanent space in the
@@ -44,5 +48,6 @@ sacrifice:
   # So if the border was 200 blocks wide, sacrifices must be >= 20 experience levels.
   percentage: 10
 
-# This section is for storage only; do not touch/modify this part.
+# This section is for storage only; do not touch/modify this
+# config section unless you *really* know what you're doing!
 permanent-blocks: 0

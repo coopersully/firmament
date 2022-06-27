@@ -10,6 +10,7 @@ public class ConfigMain implements PluginConfig {
 
     private static String namespace = "world";
     private static int growthRate = 0;
+    private static int speed = 1;
     private static boolean canAnnounce = true;
     private static boolean sacrificeEnabled = true;
     private static int sacrificePercentage = 10;
@@ -24,6 +25,8 @@ public class ConfigMain implements PluginConfig {
         // Settings section
         namespace = FirmamentPlugin.getPlugin().getConfig().getString("settings.namespace");
         growthRate = FirmamentPlugin.getPlugin().getConfig().getInt("settings.multiplier");
+        speed = FirmamentPlugin.getPlugin().getConfig().getInt("settings.speed");
+        if (speed < 1) speed = 1;
         canAnnounce = FirmamentPlugin.getPlugin().getConfig().getBoolean("settings.announcements");
 
         // Sacrifice section
@@ -61,6 +64,10 @@ public class ConfigMain implements PluginConfig {
 
     public static int getGrowthRate() {
         return growthRate;
+    }
+
+    public static int getSpeed() {
+        return speed;
     }
 
     public static List<ItemStack> getGuaranteedItems() {

@@ -1,9 +1,10 @@
 package me.coopersully.Firmament;
 
+import me.coopersully.Firmament.config.ConfigLang;
 import me.coopersully.Firmament.config.ConfigMain;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.hover.content.Text;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -89,7 +90,8 @@ public class Firmament {
 
         // Set the time to 0 if it is an instant-refresh
         int time = 0;
-        if (!isInstant) time = Math.abs(this.size - this.oldSize);
+        //                     Distance formula                     Speed multiplier
+        if (!isInstant) time = Math.abs(this.size - this.oldSize) / ConfigMain.getSpeed();
 
         // Set actual size of WorldBorder(s)
         overworld.setSize(this.size, time);
@@ -132,40 +134,50 @@ public class Firmament {
 
     public void announce(Event event) {
 
-        String prefixCause = "&8&lSource: &r", prefixChange = "&8&lWidth: &r", prefixVolume = "&8&lVolume: &r";
+        /* All variables related to the fluctuation's HoverEvent
+        showing the statistics of the border & event info. */
+        String labelSource = "&8&lSource: &r", labelWidth = "&8&lWidth: &r", labelVolume = "&8&lVolume: &r";
+        String width = labelWidth + "&b" + FirmamentPlugin.worldBorder.getOldSize() + " &7-> &b" + FirmamentPlugin.worldBorder.getSize() + "&7.\n";
+        String volume = labelVolume + "&b" + prettifyNumber((int)(Math.pow(FirmamentPlugin.worldBorder.getSize(), 2) * 384)) + " &7blocks (assuming 384 y-range).";
 
-        String cause = prefixCause + "&cThe fluctuation's source is unknown.\n";
-        String change = prefixChange + "&b" + FirmamentPlugin.worldBorder.getOldSize() + " &7-> &b" + FirmamentPlugin.worldBorder.getSize() + "&7.\n";
-        String volume = prefixVolume + "&b" + simplifyNumber((int)(Math.pow(FirmamentPlugin.worldBorder.getSize(), 2) * 256)) + " &7blocks.";
-        TextComponent notification = null;
-
-        // Announce increase/decrease
+        // Determine whether the fluctuation was an increase or decrease.
+        String operation = "fluctuated";
         if (FirmamentPlugin.worldBorder.getSize() > FirmamentPlugin.worldBorder.getOldSize()) {
-            notification = new TextComponent(ChatColor.translateAlternateColorCodes('&', "&7[&a+&7] &aThe firmament has increased to a width of " + FirmamentPlugin.worldBorder.getSize() + "."));
-            change = prefixChange + "&a" + FirmamentPlugin.worldBorder.getOldSize() + " &7->&a " + FirmamentPlugin.worldBorder.getSize() + "&7.\n";
+            operation = ConfigLang.getGeneralOperationIncrease();
+            width = labelWidth + "&a" + FirmamentPlugin.worldBorder.getOldSize() + " &7->&a " + FirmamentPlugin.worldBorder.getSize() + "&7.\n";
         } else if (FirmamentPlugin.worldBorder.getSize() < FirmamentPlugin.worldBorder.getOldSize()) {
-            notification = new TextComponent(ChatColor.translateAlternateColorCodes('&', "&7[&c-&7] &cThe firmament has decreased to a width of " + FirmamentPlugin.worldBorder.getSize() + "."));
-            change = prefixChange + "&c" + FirmamentPlugin.worldBorder.getOldSize() + " &7->&c " + FirmamentPlugin.worldBorder.getSize() + "&7.\n";
+            operation = ConfigLang.getGeneralOperationDecrease();
+            width = labelWidth + "&c" + FirmamentPlugin.worldBorder.getOldSize() + " &7->&c " + FirmamentPlugin.worldBorder.getSize() + "&7.\n";
         }
 
-        // Determine the cause of the border's fluctuation
-        if (event instanceof PlayerJoinEvent)
-            cause = prefixCause + "&b" + ((PlayerJoinEvent) event).getPlayer().getName() + " &7joined the game.\n";
-        if (event instanceof PlayerQuitEvent)
-            cause = prefixCause + "&b" + ((PlayerQuitEvent) event).getPlayer().getName() + " &7left the game.\n";
-        if (event instanceof PlayerDeathEvent)
-            cause = prefixCause + "&b" + ((PlayerDeathEvent) event).deathMessage() + "&7.\n";
-        if (event instanceof PlayerLevelChangeEvent)
-            cause = prefixCause + "&b" + ((PlayerLevelChangeEvent) event).getPlayer().getName() + " &7went from level &b" + ((PlayerLevelChangeEvent) event).getOldLevel() + " &7to &b" + ((PlayerLevelChangeEvent) event).getNewLevel() + "&7.\n";
+        /* Determines the reason for the border's fluctuation
+        and adds info for the corresponding events. */
+        String reason;
+        if (event instanceof PlayerJoinEvent joinEvent) {
+            reason = labelSource + "&b" + joinEvent.getPlayer().getName() + " &7joined the game.\n";
+        } else if (event instanceof PlayerQuitEvent quitEvent) {
+            reason = labelSource + "&b" + quitEvent.getPlayer().getName() + " &7left the game.\n";
+        }
+        else if (event instanceof PlayerDeathEvent deathEvent) {
+            reason = labelSource + "&b" + PlainTextComponentSerializer.plainText().serialize(deathEvent.deathMessage()) + "&7.\n";
+        }
+        else if (event instanceof PlayerLevelChangeEvent levelChangeEvent) {
+            reason = labelSource + "&b" + levelChangeEvent.getPlayer().getName() + " &7went from level &b" + levelChangeEvent.getOldLevel() + " &7to &b" + levelChangeEvent.getNewLevel() + "&7.\n";
+        } else {
+            reason = labelSource + "&cThe fluctuation's source is unknown.\n";
+        }
 
-        // Push announcement
-        assert notification != null;
-        notification.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.translateAlternateColorCodes('&', cause + change + volume))));
-        Bukkit.broadcast(notification);
+        // Push completed announcement
+        TextComponent announcement = Component.text(
+                ConfigLang.getPrefix() + ConfigLang.getGeneralBroadcast().replace("%operation%", operation).replace("%size%", "" + size)
+        ).hoverEvent(
+                Component.text(ChatColor.translateAlternateColorCodes('&', reason + width + volume))
+        );
+        Bukkit.broadcast(announcement);
 
     }
 
-    public String simplifyNumber(int number) {
+    public String prettifyNumber(int number) {
         return NumberFormat.getNumberInstance(Locale.US).format(number);
     }
 

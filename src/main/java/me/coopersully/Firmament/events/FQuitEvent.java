@@ -7,7 +7,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class FQuitEvent implements Listener {
-
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(FirmamentPlugin.getPlugin(), () -> FirmamentPlugin.worldBorder.refresh(false, false, event), 1);

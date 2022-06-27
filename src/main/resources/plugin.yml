@@ -27,3 +27,8 @@ commands:
     description: Determine the player with the most experience.
     usage: /maximum
     aliases: [max, checkmax]
+
+  startingitems:
+    description: Get a roll of starting items from the plugin.
+    usage: /startingitems
+    aliases: [starting-items, si]

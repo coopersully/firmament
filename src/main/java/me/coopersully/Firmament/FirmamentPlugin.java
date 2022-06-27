@@ -1,23 +1,18 @@
 package me.coopersully.Firmament;
 
-import me.coopersully.Firmament.commands.CommandFirmament;
-import me.coopersully.Firmament.commands.CommandMaximum;
-import me.coopersully.Firmament.commands.CommandMinimum;
-import me.coopersully.Firmament.commands.CommandSacrifice;
+import me.coopersully.Firmament.commands.*;
 import me.coopersully.Firmament.config.ConfigLang;
 import me.coopersully.Firmament.config.ConfigMain;
 import me.coopersully.Firmament.events.FDeathEvent;
-import me.coopersully.Firmament.events.FLevelChangeEvent;
 import me.coopersully.Firmament.events.FJoinEvent;
+import me.coopersully.Firmament.events.FLevelChangeEvent;
 import me.coopersully.Firmament.events.FQuitEvent;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class FirmamentPlugin extends JavaPlugin {
 
     private static FirmamentPlugin instance;
-    private FileConfiguration langConfig;
     public static Firmament worldBorder;
 
 
@@ -55,6 +50,7 @@ public class FirmamentPlugin extends JavaPlugin {
         getServer().getPluginCommand("sacrifice").setExecutor(new CommandSacrifice());
         getServer().getPluginCommand("minimum").setExecutor(new CommandMinimum());
         getServer().getPluginCommand("maximum").setExecutor(new CommandMaximum());
+        getServer().getPluginCommand("startingitems").setExecutor(new CommandStartingItems());
     }
 
     public void onDisable() { }

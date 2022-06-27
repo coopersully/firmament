@@ -1,5 +1,6 @@
 package me.coopersully.Firmament;
 
+import me.coopersully.Firmament.config.ConfigLang;
 import me.coopersully.Firmament.config.ConfigMain;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -17,7 +18,7 @@ public class MessageController {
 
     public static void announce(String message) {
         if (!ConfigMain.canAnnounce()) return;
-        Bukkit.broadcast(Component.text(message));
+        Bukkit.broadcast(Component.text(ConfigLang.getPrefix() + message));
     }
 
     public static void tell(@NotNull Player player, @NotNull List<String> messages) {
@@ -25,7 +26,7 @@ public class MessageController {
     }
 
     public static void tell(@NotNull Player player, String message) {
-        player.sendMessage(Component.text(message));
+        player.sendMessage(Component.text(ConfigLang.getPrefix() + message));
     }
 
 }

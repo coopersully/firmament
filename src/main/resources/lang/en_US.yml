@@ -5,8 +5,14 @@ prefix: "&eFirmament &r\u00BB "
 sacrifice:
   failure:
     experience: "&cYou do not have enough levels to sacrifice that amount."
-    permission: "&cYou don't have permission to sacrifice to the Firmament."
-    disabled: "&cThe Firmament is not accepting sacrifices at this time."
+    permission: "&cYou don't have permission to sacrifice."
+    disabled: "&cSacrifices are not being accepted at this time."
     minimum: "&cYour sacrifice must be %minimum% levels or greater."
   success:
-    broadcast: "&e%player% &7sacrificed &e%amount% &7levels to the Firmament; the border is now &e%size% &7blocks wide."
+    broadcast: "&e%player% &7sacrificed &e%amount% &7levels."
+
+general:
+  operations:
+    increase: "increased"
+    decrease: "decreased"
+  broadcast: "&7The firmament has &e%operation% &7to a width of &e%size%&7."
